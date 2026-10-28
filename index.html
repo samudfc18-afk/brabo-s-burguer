@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brabo's Burguer - Cardápio Digital</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#f59e0b', // Amarelo/Laranja da Logo
+                        darkBg: '#0f0f0f',
+                        cardBg: '#1a1a1a',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-darkBg text-gray-100 pb-24">
+
+    <!-- TOPO FIXO -->
+    <header class="sticky top-0 bg-darkBg/95 backdrop-blur z-40 shadow-md border-b border-gray-800">
+        <div class="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
+            <div>
+                <span class="text-xs text-gray-400 block">📍 Rua União, 280 - Santa Rita de Cássia</span>
+                <span class="text-[11px] text-amber-400/90 font-medium block">⏰ Seg, Ter, Qui, Sex, Sáb e Dom: 18h às 23h30</span>
+            </div>
+            <div class="bg-amber-500/10 text-amber-400 text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1 border border-amber-500/20 flex-shrink-0">
+                <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> Aberto
+            </div>
+        </div>
+        
+        <!-- Banner e Slogan -->
+        <div class="max-w-md mx-auto px-4 pb-3 flex items-center justify-between border-t border-gray-800/60 pt-2">
+            <div>
+                <h2 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
+                    Brabo's Burguer 👑
+                </h2>
+                <p class="text-xs text-gray-400">Bateu a fome? O Brabo’s resolve ! 😋</p>
+            </div>
+        </div>
+
+        <!-- Barra de Categorias -->
+        <div class="max-w-md mx-auto px-4 pb-3 overflow-x-auto flex gap-2 scrollbar-none">
+            <button onclick="filtrarCategoria('todos')" class="cat-btn bg-primary text-gray-950 text-xs font-bold px-4 py-1.5 rounded-full whitespace-nowrap transition">Todos</button>
+            <button onclick="filtrarCategoria('artesanal')" class="cat-btn bg-cardBg text-gray-300 text-xs font-medium px-4 py-1.5 rounded-full whitespace-nowrap transition border border-gray-800">Artesanais</button>
+            <button onclick="filtrarCategoria('classico')" class="cat-btn bg-cardBg text-gray-300 text-xs font-medium px-4 py-1.5 rounded-full whitespace-nowrap transition border border-gray-800">Clássicos</button>
+            <button onclick="filtrarCategoria('combos')" class="cat-btn bg-cardBg text-gray-300 text-xs font-medium px-4 py-1.5 rounded-full whitespace-nowrap transition border border-gray-800">Combos</button>
+            <button onclick="filtrarCategoria('porcoes')" class="cat-btn bg-cardBg text-gray-300 text-xs font-medium px-4 py-1.5 rounded-full whitespace-nowrap transition border border-gray-800">Porções</button>
+            <button onclick="filtrarCategoria('bebidas')" class="cat-btn bg-cardBg text-gray-300 text-xs font-medium px-4 py-1.5 rounded-full whitespace-nowrap transition border border-gray-800">Bebidas</button>
+            <button onclick="filtrarCategoria('adicionais')" class="cat-btn bg-cardBg text-gray-300 text-xs font-medium px-4 py-1.5 rounded-full whitespace-nowrap transition border border-gray-800">Adicionais</button>
+        </div>
+    </header>
+
+    <!-- LISTA DE PRODUTOS -->
+    <main class="max-w-md mx-auto px-4 pt-4 space-y-3" id="lista-produtos">
+        
+        <!-- --- ARTESANAIS --- -->
+
+        <!-- Duplo Cheddar -->
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="artesanal" onclick="abrirDetalhes('Duplo Cheddar', 30.00, 'Pão de brioche muito macio, blend 150g super suculento, cheddar, picles, cebola caramelizada, barbecue e molho especial da casa.', './img/1.jpeg')">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">Duplo Cheddar</h3>
+                <p class="text-xs text-gray-400 mt-1 line-clamp-2">Pão de brioche muito macio, blend 150g super suculento, cheddar, picles, cebola caramelizada, barbecue e molho especial da casa.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 30,00</span>
+            </div>
+            <div class="w-20 h-20 bg-gray-800 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 relative overflow-hidden border border-gray-700">
+                <img src="./img/1.jpeg" alt="Duplo Cheddar" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div class="absolute inset-0 hidden items-center justify-center text-xl">🍔</div>
+                <div class="absolute bottom-1 right-1 bg-primary text-gray-950 w-6 h-6 rounded-full flex items-center justify-center text-xs font-extrabold shadow">+</div>
+            </div>
+        </div>
+
+        <!-- Artesanal Júnior -->
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="artesanal" onclick="abrirDetalhes('Artesanal Júnior', 22.00, 'Pão de brioche muito macio, blend 150g super suculento, bacon bem macio e crocante, cheddar e molho especial da casa.', './img/artesanal-junior.jpeg')">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">Artesanal Júnior</h3>
+                <p class="text-xs text-gray-400 mt-1 line-clamp-2">Pão de brioche muito macio, blend 150g super suculento, bacon bem macio e crocante, cheddar e molho especial da casa.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 22,00</span>
+            </div>
+            <div class="w-20 h-20 bg-gray-800 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 relative overflow-hidden border border-gray-700">
+                <img src="./img/artesanal-junior.jpeg" alt="Artesanal Júnior" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div class="absolute inset-0 hidden items-center justify-center text-xl">🍔</div>
+                <div class="absolute bottom-1 right-1 bg-primary text-gray-950 w-6 h-6 rounded-full flex items-center justify-center text-xs font-extrabold shadow">+</div>
+            </div>
+        </div>
+
+        <!-- Supremo -->
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="artesanal" onclick="abrirDetalhes('Supremo', 35.00, 'Pão de brioche bem macio, 1 blend de 150g, bacon bem macio e crocante, cheddar, cebola roxa, picles, salada e molho especial da casa.', './img/supremo.jpeg')">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">Supremo</h3>
+                <p class="text-xs text-gray-400 mt-1 line-clamp-2">Pão de brioche bem macio, 1 blend de 150g, bacon bem macio e crocante, cheddar, cebola roxa, picles, salada e molho especial da casa.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 35,00</span>
+            </div>
+            <div class="w-20 h-20 bg-gray-800 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 relative overflow-hidden border border-gray-700">
+                <img src="./img/supremo.jpeg" alt="Supremo" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div class="absolute inset-0 hidden items-center justify-center text-xl">🥓</div>
+                <div class="absolute bottom-1 right-1 bg-primary text-gray-950 w-6 h-6 rounded-full flex items-center justify-center text-xs font-extrabold shadow">+</div>
+            </div>
+        </div>
+
+        <!-- Brabo Burguer -->
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="artesanal" onclick="abrirDetalhes('Brabo Burguer', 37.00, 'Pão brioche bem macio e suculento, blend de 150g super suculenta, cheddar, cebola onions, fatias de bacon bem macio e crocante, salada e molho especial da casa.', './img/brabos-burguer.jpeg')">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">Brabo Burguer</h3>
+                <p class="text-xs text-gray-400 mt-1 line-clamp-2">Pão brioche bem macio e suculento, blend de 150g super suculenta, cheddar, cebola onions, fatias de bacon bem macio e crocante, salada e molho especial da casa.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 37,00</span>
+            </div>
+            <div class="w-20 h-20 bg-gray-800 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 relative overflow-hidden border border-gray-700">
+                <img src="./img/brabos-burguer.jpeg" alt="Brabo Burguer" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div class="absolute inset-0 hidden items-center justify-center text-xl">👑</div>
+                <div class="absolute bottom-1 right-1 bg-primary text-gray-950 w-6 h-6 rounded-full flex items-center justify-center text-xs font-extrabold shadow">+</div>
+            </div>
+        </div>
+
+        <!-- Brabo’s Burguer Especial -->
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="artesanal" onclick="abrirDetalhes('Brabo’s Burguer Especial', 40.00, 'Pão de brioche bem macio, 2 blend de 140g super suculenta, 2 cheddar, cebola onions, fatias de bacon bem macio e crocante, salada e molho especial da casa.', './img/brabos-especial.jpeg')">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">Brabo’s Burguer Especial</h3>
+                <p class="text-xs text-gray-400 mt-1 line-clamp-2">Pão de brioche bem macio, 2 blend de 140g super suculenta, 2 cheddar, cebola onions, fatias de bacon bem macio e crocante, salada e molho especial da casa.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 40,00</span>
+            </div>
+            <div class="w-20 h-20 bg-gray-800 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 relative overflow-hidden border border-gray-700">
+                <img src="./img/brabos-especial.jpeg" alt="Brabo’s Burguer Especial" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div class="absolute inset-0 hidden items-center justify-center text-xl">⭐</div>
+                <div class="absolute bottom-1 right-1 bg-primary text-gray-950 w-6 h-6 rounded-full flex items-center justify-center text-xs font-extrabold shadow">+</div>
+            </div>
+        </div>
+
+
+        <!-- --- CLÁSSICOS (TRADICIONAIS) --- -->
+
+        <!-- X-Salada -->
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="classico" onclick="abrirDetalhes('X-Salada', 18.00, 'Pão tradicional, carne bovina, presunto, mussarela, milho, abacaxi, alface e tomate.', './img/xsalada.jpeg')">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">X-Salada</h3>
+                <p class="text-xs text-gray-400 mt-1 line-clamp-2">Pão tradicional, carne bovina, presunto, mussarela, milho, abacaxi, alface e tomate.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 18,00</span>
+            </div>
+            <div class="w-20 h-20 bg-gray-800 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 relative overflow-hidden border border-gray-700">
+                <img src="./img/xsalada.jpeg" alt="X-Salada" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div class="absolute inset-0 hidden items-center justify-center text-xl">🥗</div>
+                <div class="absolute bottom-1 right-1 bg-primary text-gray-950 w-6 h-6 rounded-full flex items-center justify-center text-xs font-extrabold shadow">+</div>
+            </div>
+        </div>
+
+        <!-- X-Bacon -->
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="classico" onclick="abrirDetalhes('X-Bacon', 20.00, 'Pão tradicional, carne bovina, bacon, mussarela, batata palha, barbecue, alface e tomate.', './img/xbacon.jpeg')">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">X-Bacon</h3>
+                <p class="text-xs text-gray-400 mt-1 line-clamp-2">Pão tradicional, carne bovina, bacon, mussarela, batata palha, barbecue, alface e tomate.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 20,00</span>
+            </div>
+            <div class="w-20 h-20 bg-gray-800 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 relative overflow-hidden border border-gray-700">
+                <img src="./img/xbacon.jpeg" alt="X-Bacon" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div class="absolute inset-0 hidden items-center justify-center text-xl">🥪</div>
+                <div class="absolute bottom-1 right-1 bg-primary text-gray-950 w-6 h-6 rounded-full flex items-center justify-center text-xs font-extrabold shadow">+</div>
+            </div>
+        </div>
+
+        <!-- X-Tudo -->
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="classico" onclick="abrirDetalhes('X-Tudo', 22.00, 'Pão tradicional, carne bovina, ovo, bacon, mussarela, presunto, milho, batata palha, alface e tomate.', './img/xtudo.jpeg')">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">X-Tudo</h3>
+                <p class="text-xs text-gray-400 mt-1 line-clamp-2">Pão tradicional, carne bovina, ovo, bacon, mussarela, presunto, milho, batata palha, alface e tomate.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 22,00</span>
+            </div>
+            <div class="w-20 h-20 bg-gray-800 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 relative overflow-hidden border border-gray-700">
+                <img src="./img/xtudo.jpeg" alt="X-Tudo" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div class="absolute inset-0 hidden items-center justify-center text-xl">🍔</div>
+                <div class="absolute bottom-1 right-1 bg-primary text-gray-950 w-6 h-6 rounded-full flex items-center justify-center text-xs font-extrabold shadow">+</div>
+            </div>
+        </div>
+
+        <!-- X-Tudão -->
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="classico" onclick="abrirDetalhes('X-Tudão', 35.00, 'Pão tradicional, 2 carnes bovinas, 2 ovos, bacon, 2x mussarela, 2x presunto, abacaxi, milho, batata palha, alface e tomate.', './img/xtudao.jpeg')">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">X-Tudão</h3>
+                <p class="text-xs text-gray-400 mt-1 line-clamp-2">Pão tradicional, 2 carnes bovinas, 2 ovos, bacon, 2x mussarela, 2x presunto, abacaxi, milho, batata palha, alface e tomate.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 35,00</span>
+            </div>
+            <div class="w-20 h-20 bg-gray-800 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 relative overflow-hidden border border-gray-700">
+                <img src="./img/xtudao.jpeg" alt="X-Tudão" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div class="absolute inset-0 hidden items-center justify-center text-xl">👑</div>
+                <div class="absolute bottom-1 right-1 bg-primary text-gray-950 w-6 h-6 rounded-full flex items-center justify-center text-xs font-extrabold shadow">+</div>
+            </div>
+        </div>
+
+
+        <!-- --- COMBOS --- -->
+
+        <!-- Combo Júnior -->
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="combos" onclick="abrirDetalhes('Combo Júnior', 26.00, 'Artesanal Júnior + Batata + Refri.', './img/combo-junior.jpeg')">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">Combo Júnior 🥤🍟</h3>
+                <p class="text-xs text-gray-400 mt-1 line-clamp-2">Artesanal Júnior + Batata + Refri.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 26,00</span>
+            </div>
+            <div class="w-20 h-20 bg-gray-800 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 relative overflow-hidden border border-gray-700">
+                <img src="./img/combo-junior.jpeg" alt="Combo Júnior" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div class="absolute inset-0 hidden items-center justify-center text-xl">🥤</div>
+                <div class="absolute bottom-1 right-1 bg-primary text-gray-950 w-6 h-6 rounded-full flex items-center justify-center text-xs font-extrabold shadow">+</div>
+            </div>
+        </div>
+
+        <!-- Combo Brabo’s Especial -->
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="combos" onclick="abrirDetalhes('Combo Brabo’s Especial', 58.00, 'Brabo’s Burguer Especial + Batata + Coca.', './img/combo-especial.jpeg')">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">Combo Brabo’s Especial 🥤🍟</h3>
+                <p class="text-xs text-gray-400 mt-1 line-clamp-2">Brabo’s Burguer Especial + Batata + Coca.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 58,00</span>
+            </div>
+            <div class="w-20 h-20 bg-gray-800 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 relative overflow-hidden border border-gray-700">
+                <img src="./img/combo-especial.jpeg" alt="Combo Brabo’s Especial" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div class="absolute inset-0 hidden items-center justify-center text-xl">🥤</div>
+                <div class="absolute bottom-1 right-1 bg-primary text-gray-950 w-6 h-6 rounded-full flex items-center justify-center text-xs font-extrabold shadow">+</div>
+            </div>
+        </div>
+
+
+        <!-- --- PORÇÕES --- -->
+
+        <!-- Batata com Cheddar e Bacon -->
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="porcoes" onclick="abrirDetalhes('Batata com Cheddar e Bacon', 25.00, 'Porção de batata frita crocante e dourada, coberta com cremoso molho cheddar e pedaços de bacon bem crocante.', './img/batata.jpeg')">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">Batata com Cheddar e Bacon</h3>
+                <p class="text-xs text-gray-400 mt-1 line-clamp-2">Porção de batata frita crocante e dourada, coberta com cremoso molho cheddar e pedaços de bacon bem crocante.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 25,00</span>
+            </div>
+            <div class="w-20 h-20 bg-gray-800 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 relative overflow-hidden border border-gray-700">
+                <img src="./img/batata.jpeg" alt="Batata com Cheddar e Bacon" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div class="absolute inset-0 hidden items-center justify-center text-xl">🍟</div>
+                <div class="absolute bottom-1 right-1 bg-primary text-gray-950 w-6 h-6 rounded-full flex items-center justify-center text-xs font-extrabold shadow">+</div>
+            </div>
+        </div>
+
+        <!-- Macarrão na Chapa -->
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="porcoes" onclick="abrirDetalhes('Macarrão na Chapa', 22.00, 'Delicioso macarrão preparado na chapa com temperos especiais da casa.', './img/macarrao.jpeg')">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">Macarrão na Chapa</h3>
+                <p class="text-xs text-gray-400 mt-1 line-clamp-2">Delicioso macarrão preparado na chapa com temperos especiais da casa.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 22,00</span>
+            </div>
+            <div class="w-20 h-20 bg-gray-800 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 relative overflow-hidden border border-gray-700">
+                <img src="./img/macarrao.jpeg" alt="Macarrão na Chapa" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div class="absolute inset-0 hidden items-center justify-center text-xl">🍝</div>
+                <div class="absolute bottom-1 right-1 bg-primary text-gray-950 w-6 h-6 rounded-full flex items-center justify-center text-xs font-extrabold shadow">+</div>
+            </div>
+        </div>
+
+
+        <!-- --- BEBIDAS --- -->
+
+        <!-- Coca Lata -->
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="bebidas" onclick="adicionarAoCarrinhoAvulso('Coca Lata', 7.00)">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">Coca Lata</h3>
+                <p class="text-xs text-gray-400 mt-1">Refrigerante Coca-Cola em lata 350ml.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 7,00</span>
+            </div>
+            <div class="bg-primary text-gray-950 w-8 h-8 rounded-full flex items-center justify-center font-bold text-base shadow flex-shrink-0">+</div>
+        </div>
+
+        <!-- Suco Del Valle -->
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="bebidas" onclick="adicionarAoCarrinhoAvulso('Suco Del Valle', 6.00)">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">Suco Del Valle</h3>
+                <p class="text-xs text-gray-400 mt-1">Suco Del Valle em lata / caixinha.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 6,00</span>
+            </div>
+            <div class="bg-primary text-gray-950 w-8 h-8 rounded-full flex items-center justify-center font-bold text-base shadow flex-shrink-0">+</div>
+        </div>
+
+
+        <!-- --- ADICIONAIS --- -->
+
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="adicionais" onclick="adicionarAoCarrinhoAvulso('Cheddar (Adicional)', 5.00)">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">Cheddar (Adicional)</h3>
+                <p class="text-xs text-gray-400 mt-1">Porção extra de cheddar cremoso.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 5,00</span>
+            </div>
+            <div class="bg-primary text-gray-950 w-8 h-8 rounded-full flex items-center justify-center font-bold text-base shadow flex-shrink-0">+</div>
+        </div>
+
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="adicionais" onclick="adicionarAoCarrinhoAvulso('Bacon (Adicional)', 4.00)">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">Bacon (Adicional)</h3>
+                <p class="text-xs text-gray-400 mt-1">Porção extra de bacon crocante.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 4,00</span>
+            </div>
+            <div class="bg-primary text-gray-950 w-8 h-8 rounded-full flex items-center justify-center font-bold text-base shadow flex-shrink-0">+</div>
+        </div>
+
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="adicionais" onclick="adicionarAoCarrinhoAvulso('Mussarela (Adicional)', 4.00)">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">Mussarela (Adicional)</h3>
+                <p class="text-xs text-gray-400 mt-1">Fatia extra de queijo mussarela.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 4,00</span>
+            </div>
+            <div class="bg-primary text-gray-950 w-8 h-8 rounded-full flex items-center justify-center font-bold text-base shadow flex-shrink-0">+</div>
+        </div>
+
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="adicionais" onclick="adicionarAoCarrinhoAvulso('Cebola Caramelizada (Adicional)', 3.50)">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">Cebola Caramelizada (Adicional)</h3>
+                <p class="text-xs text-gray-400 mt-1">Porção extra de cebola caramelizada.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 3,50</span>
+            </div>
+            <div class="bg-primary text-gray-950 w-8 h-8 rounded-full flex items-center justify-center font-bold text-base shadow flex-shrink-0">+</div>
+        </div>
+
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="adicionais" onclick="adicionarAoCarrinhoAvulso('Molho Verde (Adicional)', 3.00)">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">Molho Verde (Adicional)</h3>
+                <p class="text-xs text-gray-400 mt-1">Porção extra do molho verde da casa.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 3,00</span>
+            </div>
+            <div class="bg-primary text-gray-950 w-8 h-8 rounded-full flex items-center justify-center font-bold text-base shadow flex-shrink-0">+</div>
+        </div>
+
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="adicionais" onclick="adicionarAoCarrinhoAvulso('Cebola Onions (Adicional)', 3.00)">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">Cebola Onions (Adicional)</h3>
+                <p class="text-xs text-gray-400 mt-1">Porção extra de cebola empanada.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 3,00</span>
+            </div>
+            <div class="bg-primary text-gray-950 w-8 h-8 rounded-full flex items-center justify-center font-bold text-base shadow flex-shrink-0">+</div>
+        </div>
+
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="adicionais" onclick="adicionarAoCarrinhoAvulso('Cebola Crispy (Adicional)', 3.00)">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">Cebola Crispy (Adicional)</h3>
+                <p class="text-xs text-gray-400 mt-1">Porção extra de cebola crispy.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 3,00</span>
+            </div>
+            <div class="bg-primary text-gray-950 w-8 h-8 rounded-full flex items-center justify-center font-bold text-base shadow flex-shrink-0">+</div>
+        </div>
+
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="adicionais" onclick="adicionarAoCarrinhoAvulso('Barbecue (Adicional)', 2.50)">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">Barbecue (Adicional)</h3>
+                <p class="text-xs text-gray-400 mt-1">Molho barbecue extra.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 2,50</span>
+            </div>
+            <div class="bg-primary text-gray-950 w-8 h-8 rounded-full flex items-center justify-center font-bold text-base shadow flex-shrink-0">+</div>
+        </div>
+
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="adicionais" onclick="adicionarAoCarrinhoAvulso('Abacaxi (Adicional)', 2.50)">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">Abacaxi (Adicional)</h3>
+                <p class="text-xs text-gray-400 mt-1">Fatia de abacaxi extra.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 2,50</span>
+            </div>
+            <div class="bg-primary text-gray-950 w-8 h-8 rounded-full flex items-center justify-center font-bold text-base shadow flex-shrink-0">+</div>
+        </div>
+
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="adicionais" onclick="adicionarAoCarrinhoAvulso('Presunto (Adicional)', 2.50)">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">Presunto (Adicional)</h3>
+                <p class="text-xs text-gray-400 mt-1">Fatia de presunto extra.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 2,50</span>
+            </div>
+            <div class="bg-primary text-gray-950 w-8 h-8 rounded-full flex items-center justify-center font-bold text-base shadow flex-shrink-0">+</div>
+        </div>
+
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="adicionais" onclick="adicionarAoCarrinhoAvulso('Batata Palha (Adicional)', 2.00)">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">Batata Palha (Adicional)</h3>
+                <p class="text-xs text-gray-400 mt-1">Porção extra de batata palha.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 2,00</span>
+            </div>
+            <div class="bg-primary text-gray-950 w-8 h-8 rounded-full flex items-center justify-center font-bold text-base shadow flex-shrink-0">+</div>
+        </div>
+
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="adicionais" onclick="adicionarAoCarrinhoAvulso('Milho (Adicional)', 2.00)">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">Milho (Adicional)</h3>
+                <p class="text-xs text-gray-400 mt-1">Porção extra de milho.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 2,00</span>
+            </div>
+            <div class="bg-primary text-gray-950 w-8 h-8 rounded-full flex items-center justify-center font-bold text-base shadow flex-shrink-0">+</div>
+        </div>
+
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="adicionais" onclick="adicionarAoCarrinhoAvulso('Ovo (Adicional)', 2.00)">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">Ovo (Adicional)</h3>
+                <p class="text-xs text-gray-400 mt-1">Ovo frito extra na chapa.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 2,00</span>
+            </div>
+            <div class="bg-primary text-gray-950 w-8 h-8 rounded-full flex items-center justify-center font-bold text-base shadow flex-shrink-0">+</div>
+        </div>
+
+    </main>
+
+    <!-- MODAL DE DETALHES DO PRODUTO -->
+    <div id="modal-detalhes" class="fixed inset-0 bg-black/80 z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-cardBg border border-gray-800 w-full max-w-md rounded-t-3xl sm:rounded-2xl max-h-[90vh] overflow-y-auto flex flex-col">
+            
+            <div class="relative w-full h-64 bg-black/60 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                <img id="modal-img" src="" alt="Foto do Produto" class="w-full h-full object-contain">
+                <button onclick="fecharDetalhes()" class="absolute top-3 right-3 bg-black/70 hover:bg-black text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg">&times;</button>
+            </div>
+
+            <div class="p-5 flex-1 space-y-4">
+                <div>
+                    <h3 id="modal-nome" class="text-lg font-bold text-white">Nome do Lanche</h3>
+                    <p id="modal-desc" class="text-xs text-gray-300 mt-2 leading-relaxed">Descrição completa do lanche.</p>
+                    <span id="modal-preco" class="text-base font-extrabold text-primary mt-3 block">R$ 0,00</span>
+                </div>
+
+                <hr class="border-gray-800">
+
+                <div>
+                    <label class="block text-xs font-semibold text-amber-400 mb-2 uppercase tracking-wide">Deseja adicionar acréscimos?</label>
+                    <div id="modal-lista-acrescimos" class="space-y-2 max-h-48 overflow-y-auto pr-1"></div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Observações do Item:</label>
+                    <textarea id="modal-obs" placeholder="Ex: Sem cebola, ponto da carne..." class="w-full bg-darkBg border border-gray-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-primary h-16"></textarea>
+                </div>
+            </div>
+
+            <div class="sticky bottom-0 bg-cardBg border-t border-gray-800 p-4 flex items-center justify-between gap-4">
+                <div class="flex items-center bg-darkBg border border-gray-800 rounded-xl overflow-hidden flex-shrink-0">
+                    <button type="button" onclick="mudarQtdModal(-1)" class="px-3 py-2 text-amber-400 hover:bg-gray-800 font-bold text-base">-</button>
+                    <span id="modal-qtd" class="px-3 text-sm font-bold text-white">1</span>
+                    <button type="button" onclick="mudarQtdModal(1)" class="px-3 py-2 text-amber-400 hover:bg-gray-800 font-bold text-base">+</button>
+                </div>
+                <button type="button" onclick="confirmarAdicaoModal()" class="flex-1 bg-primary hover:bg-amber-600 text-gray-950 font-bold py-3 rounded-xl text-sm shadow transition flex items-center justify-center gap-2">
+                    Adicionar <span id="modal-botao-total">R$ 0,00</span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- BARRA INFERIOR DE CARRINHO -->
+    <div id="carrinho-bar" class="fixed bottom-0 left-0 right-0 bg-cardBg border-t border-gray-800 p-3 shadow-lg hidden z-40">
+        <div class="max-w-md mx-auto flex items-center justify-between">
+            <div>
+                <span class="text-xs text-gray-400 block" id="qtd-itens">0 itens</span>
+                <span class="text-base font-extrabold text-white" id="total-valor">R$ 0,00</span>
+            </div>
+            <button onclick="abrirCheckout()" class="bg-primary hover:bg-amber-600 text-gray-950 font-bold px-6 py-3 rounded-xl text-sm shadow-md transition flex items-center gap-2">
+                Ver Sacola 🛒
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL DE CHECKOUT -->
+    <div id="modal-checkout" class="fixed inset-0 bg-black/75 z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-cardBg border border-gray-800 w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-bold text-white">Finalizar Pedido</h2>
+                <button onclick="fecharCheckout()" class="text-gray-400 hover:text-white font-bold text-xl">&times;</button>
+            </div>
+
+            <div id="resumo-sacola" class="bg-darkBg p-3 rounded-xl mb-4 text-xs space-y-1 border border-gray-800 text-gray-300"></div>
+
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Seu Nome:</label>
+                    <input type="text" id="cliente-nome" placeholder="Ex: João Silva" class="w-full bg-darkBg border border-gray-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-primary">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Endereço de Entrega (ou Retirada):</label>
+                    <input type="text" id="cliente-endereco" placeholder="Rua, Número, Bairro e Ponto de Referência" class="w-full bg-darkBg border border-gray-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-primary">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Forma de Pagamento:</label>
+                    <select id="cliente-pagamento" class="w-full bg-darkBg border border-gray-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-primary">
+                        <option value="Pix">Pix</option>
+                        <option value="Cartão de Crédito">Cartão de Crédito</option>
+                        <option value="Cartão de Débito">Cartão de Débito</option>
+                        <option value="Dinheiro">Dinheiro (com troco)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Observações Gerais do Pedido:</label>
+                    <textarea id="cliente-obs" placeholder="Ex: Entregar na campainha..." class="w-full bg-darkBg border border-gray-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-primary h-20"></textarea>
+                </div>
+
+                <button onclick="enviarWhatsApp()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl text-sm shadow-md transition flex items-center justify-center gap-2 mt-4">
+                    Enviar Pedido pelo WhatsApp 📱
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT DE CARRINHO E INTERAÇÃO -->
+    <script>
+        let carrinho = [];
+        let produtoSelecionado = { name: '', price: 0, desc: '', img: '' };
+        let qtdModal = 1;
+
+        const listaAdicionais = [
+            { name: 'Cheddar', price: 5.00 },
+            { name: 'Bacon', price: 4.00 },
+            { name: 'Mussarela', price: 4.00 },
+            { name: 'Cebola Caramelizada', price: 3.50 },
+            { name: 'Molho Verde', price: 3.00 },
+            { name: 'Cebola Onions', price: 3.00 },
+            { name: 'Cebola Crispy', price: 3.00 },
+            { name: 'Barbecue', price: 2.50 },
+            { name: 'Abacaxi', price: 2.50 },
+            { name: 'Presunto', price: 2.50 },
+            { name: 'Batata Palha', price: 2.00 },
+            { name: 'Milho', price: 2.00 },
+            { name: 'Ovo', price: 2.00 }
+        ];
+
+        function abrirDetalhes(nome, preco, desc, img) {
+            produtoSelecionado = { name: nome, price: preco, desc: desc, img: img };
+            qtdModal = 1;
+
+            document.getElementById('modal-nome').innerText = nome;
+            document.getElementById('modal-desc').innerText = desc;
+            document.getElementById('modal-preco').innerText = `R$ ${preco.toFixed(2).replace('.', ',')}`;
+            document.getElementById('modal-img').src = img;
+            document.getElementById('modal-qtd').innerText = qtdModal;
+            document.getElementById('modal-obs').value = '';
+
+            const container = document.getElementById('modal-lista-acrescimos');
+            container.innerHTML = listaAdicionais.map((ad) => `
+                <label class="flex items-center justify-between bg-darkBg p-2.5 rounded-xl border border-gray-800 cursor-pointer hover:border-gray-700">
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" value="${ad.name}" data-price="${ad.price}" onchange="atualizarPrecoModal()" class="modal-chk w-4 h-4 accent-primary rounded">
+                        <span class="text-xs text-gray-200">${ad.name}</span>
+                    </div>
+                    <span class="text-xs font-semibold text-primary">+ R$ ${ad.price.toFixed(2).replace('.', ',')}</span>
+                </label>
+            `).join('');
+
+            atualizarPrecoModal();
+            document.getElementById('modal-detalhes').classList.remove('hidden');
+        }
+
+        function fecharDetalhes() {
+            document.getElementById('modal-detalhes').classList.add('hidden');
+        }
+
+        function mudarQtdModal(valor) {
+            qtdModal += valor;
+            if (qtdModal < 1) qtdModal = 1;
+            document.getElementById('modal-qtd').innerText = qtdModal;
+            atualizarPrecoModal();
+        }
+
+        function atualizarPrecoModal() {
+            let total = produtoSelecionado.price;
+            const checkboxes = document.querySelectorAll('.modal-chk:checked');
+            checkboxes.forEach(cb => {
+                total += parseFloat(cb.dataset.price);
+            });
+            total *= qtdModal;
+            document.getElementById('modal-botao-total').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        }
+
+        function confirmarAdicaoModal() {
+            const checkboxes = document.querySelectorAll('.modal-chk:checked');
+            let adicionaisSelecionados = [];
+            let precoUnitario = produtoSelecionado.price;
+
+            checkboxes.forEach(cb => {
+                adicionaisSelecionados.push(cb.value);
+                precoUnitario += parseFloat(cb.dataset.price);
+            });
+
+            const obsInput = document.getElementById('modal-obs').value.trim();
+            let descricaoDetalhada = produtoSelecionado.name;
+            if (adicionaisSelecionados.length > 0) {
+                descricaoDetalhada += ` (Acréscimos: ${adicionaisSelecionados.join(', ')})`;
+            }
+            if (obsInput) {
+                descricaoDetalhada += ` [Obs: ${obsInput}]`;
+            }
+
+            carrinho.push({ descricao: descricaoDetalhada, price: precoUnitario, qtd: qtdModal });
+
+            fecharDetalhes();
+            atualizarCarrinhoUI();
+        }
+
+        function adicionarAoCarrinhoAvulso(nome, preco) {
+            carrinho.push({ descricao: nome, price: preco, qtd: 1 });
+            atualizarCarrinhoUI();
+        }
+
+        function atualizarCarrinhoUI() {
+            const barra = document.getElementById('carrinho-bar');
+            const qtdItensEl = document.getElementById('qtd-itens');
+            const totalValorEl = document.getElementById('total-valor');
+
+            const totalQtd = carrinho.reduce((sum, item) => sum + item.qtd, 0);
+            const totalPreco = carrinho.reduce((sum, item) => sum + (item.price * item.qtd), 0);
+
+            if (totalQtd > 0) {
+                barra.classList.remove('hidden');
+                qtdItensEl.innerText = `${totalQtd} ${totalQtd === 1 ? 'item' : 'itens'}`;
+                totalValorEl.innerText = `R$ ${totalPreco.toFixed(2).replace('.', ',')}`;
+            } else {
+                barra.classList.add('hidden');
+            }
+        }
+
+        function abrirCheckout() {
+            const resumo = document.getElementById('resumo-sacola');
+            resumo.innerHTML = carrinho.map((item, index) => `
+                <div class="flex justify-between items-center py-1.5 border-b border-gray-800/50">
+                    <div>
+                        <span class="font-bold text-white">${item.qtd}x ${item.descricao}</span>
+                        <span class="block text-[10px] text-gray-400">R$ ${item.price.toFixed(2).replace('.', ',')} un</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-semibold text-white">R$ ${(item.price * item.qtd).toFixed(2).replace('.', ',')}</span>
+                        <button onclick="removerItem(${index})" class="text-red-400 hover:text-red-300 text-xs px-1.5 py-0.5 bg-red-500/10 rounded border border-red-500/20">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            const totalPreco = carrinho.reduce((sum, item) => sum + (item.price * item.qtd), 0);
+            resumo.innerHTML += `<div class="pt-3 mt-2 flex justify-between font-bold text-white text-sm border-t border-gray-700">
+                <span>Total:</span>
+                <span>R$ ${totalPreco.toFixed(2).replace('.', ',')}</span>
+            </div>`;
+
+            document.getElementById('modal-checkout').classList.remove('hidden');
+        }
+
+        function removerItem(index) {
+            carrinho.splice(index, 1);
+            atualizarCarrinhoUI();
+            if (carrinho.length > 0) {
+                abrirCheckout();
+            } else {
+                fecharCheckout();
+            }
+        }
+
+        function fecharCheckout() {
+            document.getElementById('modal-checkout').classList.add('hidden');
+        }
+
+        function enviarWhatsApp() {
+            const nome = document.getElementById('cliente-nome').value.trim();
+            const endereco = document.getElementById('cliente-endereco').value.trim();
+            const pagamento = document.getElementById('cliente-pagamento').value;
+            const obs = document.getElementById('cliente-obs').value.trim();
+
+            if (!nome || !endereco) {
+                alert('Por favor, preencha seu nome e endereço de entrega.');
+                return;
+            }
+
+            let mensagem = `🍔 *NOVO PEDIDO - BRABO'S BURGUER*\n\n`;
+            mensagem += `👤 *Cliente:* ${nome}\n`;
+            mensagem += `📍 *Endereço:* ${endereco}\n`;
+            mensagem += `💳 *Pagamento:* ${pagamento}\n`;
+            if (obs) mensagem += `📝 *Obs Gerais:* ${obs}\n`;
+            mensagem += `\n*ITENS DO PEDIDO:*\n`;
+
+            carrinho.forEach(item => {
+                mensagem += `• ${item.qtd}x ${item.descricao} - R$ ${(item.price * item.qtd).toFixed(2).replace('.', ',')}\n`;
+            });
+
+            const totalPreco = carrinho.reduce((sum, item) => sum + (item.price * item.qtd), 0);
+            mensagem += `\n*Total a pagar:* R$ ${totalPreco.toFixed(2).replace('.', ',')}`;
+
+            const numeroWhatsApp = '5531997401932';
+            const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+            
+            window.open(url, '_blank');
+        }
+
+        function filtrarCategoria(categoria) {
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.remove('bg-primary', 'text-gray-950', 'font-bold');
+                btn.classList.add('bg-cardBg', 'text-gray-300', 'font-medium', 'border', 'border-gray-800');
+            });
+            event.target.classList.remove('bg-cardBg', 'text-gray-300', 'font-medium', 'border', 'border-gray-800');
+            event.target.classList.add('bg-primary', 'text-gray-950', 'font-bold');
+
+            document.querySelectorAll('.produto-card').forEach(card => {
+                if (categoria === 'todos' || card.dataset.cat === categoria) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
