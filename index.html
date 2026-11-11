@@ -546,8 +546,8 @@
                     <textarea id="cliente-obs" placeholder="Ex: Entregar na campainha..." class="w-full bg-darkBg border border-gray-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-primary h-16"></textarea>
                 </div>
 
-                <button onclick="enviarWhatsApp()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl text-sm shadow-md transition flex items-center justify-center gap-2 mt-4">
-                    Enviar Pedido pelo WhatsApp 📱
+                <button onclick="enviarPedido()" class="w-full bg-primary text-white font-bold py-3 rounded-xl hover:opacity-90 transition shadow-lg shadow-primary/20 mt-4">
+    Concluir Pedido via WhatsApp
                 </button>
             </div>
     <!-- SCRIPT DE CARRINHO E INTERAÇÃO -->
@@ -946,5 +946,61 @@
   // 3. Vincule a função ao clique do seu botão de finalizar pedido:
   // Exemplo: document.getElementById('btnFinalizar').addEventListener('click', enviarPedido);
 </script>
+<!-- Final do index.html -->
+<script>
+  // ... seus outros códigos do cardápio continuam aqui em cima ...
+
+  const API_RENDER_URL = 'https://brabo-s-burguer-api.onrender.com/api/pedidos';
+
+  async function enviarPedido() {
+    const nomeCliente = document.getElementById('cliente-nome')?.value.trim();
+
+    if (!nomeCliente) {
+      alert('Por favor, informe seu nome.');
+      return;
+    }
+
+    const pedidoData = {
+      cliente: nomeCliente,
+      telefone: document.getElementById('cliente-telefone')?.value || '',
+      endereco: document.getElementById('cliente-endereco')?.value || '',
+      bairro: document.getElementById('cliente-bairro')?.value || '',
+      formaPagamento: document.getElementById('forma-pagamento')?.value || '',
+      troco: document.getElementById('troco-para')?.value || 'Não',
+      itens: carrinho, 
+      total: typeof valorTotal !== 'undefined' ? valorTotal : 0,
+      dataHora: new Date().toLocaleString('pt-BR')
+    };
+
+    try {
+      fetch(API_RENDER_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(pedidoData)
+      });
+    } catch (erro) {
+      console.warn('Erro ao enviar para API de impressão:', erro);
+    }
+
+    let mensagem = `*NOVO PEDIDO - BRABO'S BURGUER*\n\n`;
+    mensagem += `*Cliente:* ${pedidoData.cliente}\n`;
+    if (pedidoData.telefone) mensagem += `*Telefone:* ${pedidoData.telefone}\n`;
+    if (pedidoData.endereco) mensagem += `*Endereço:* ${pedidoData.endereco}\n`;
+    if (pedidoData.formaPagamento) mensagem += `*Pagamento:* ${pedidoData.formaPagamento}\n`;
+    
+    mensagem += `\n*ITENS:* \n`;
+    if (Array.isArray(carrinho)) {
+      carrinho.forEach(item => {
+        mensagem += `• ${item.qtd || 1}x ${item.nome} - R$ ${((item.preco || 0) * (item.qtd || 1)).toFixed(2)}\n`;
+      });
+    }
+
+    const foneLoja = '5531999999999'; // Número da lanchonete com DDD
+    const urlWhatsapp = `https://wa.me/${foneLoja}?text=${encodeURIComponent(mensagem)}`;
+    
+    window.open(urlWhatsapp, '_blank');
+  }
+</script>
+</body>
 </body>
 </html>
