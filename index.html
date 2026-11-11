@@ -891,21 +891,40 @@
     </script>
     <!-- Final do seu index.html -->
 <script>
-  // 1. Constante com a URL da API do Render (coloque no topo do script)
+  // 1. URL da sua API no Render
   const API_RENDER_URL = 'https://brabo-s-burguer-api.onrender.com/api/pedidos';
 
-  // 2. A função completa de envio
+  // 2. Função de envio corrigida
   async function enviarPedido() {
+    // Busca o nome usando os IDs do seu HTML (cliente-nome ou nomeCliente)
+    const nomeCliente = document.getElementById('cliente-nome')?.value.trim() || 
+                        document.getElementById('nomeCliente')?.value.trim() || '';
+
+    if (!nomeCliente) {
+      alert('Por favor, informe seu nome para finalizar o pedido.');
+      return;
+    }
+
+    // Calcula o valor total com segurança se a variável global não existir
+    let totalCalculado = 0;
+    if (typeof valorTotalComFrete !== 'undefined') {
+      totalCalculado = valorTotalComFrete;
+    } else if (typeof valorTotal !== 'undefined') {
+      totalCalculado = valorTotal;
+    } else if (Array.isArray(carrinho)) {
+      totalCalculado = carrinho.reduce((acc, item) => acc + ((item.preco || 0) * (item.qtd || 1)), 0);
+    }
+
     // Coleta dados dos inputs do formulário de checkout
     const pedidoData = {
-      cliente: document.getElementById('nomeCliente')?.value || 'Cliente não informado',
-      telefone: document.getElementById('telefoneCliente')?.value || '',
-      endereco: document.getElementById('enderecoCliente')?.value || '',
-      bairro: document.getElementById('bairroFrete')?.value || '',
-      formaPagamento: document.getElementById('formaPagamento')?.value || '',
-      troco: document.getElementById('trocoPara')?.value || 'Não',
-      itens: carrinho, // Certifique-se que 'carrinho' é o nome da sua variável global com os itens
-      total: valorTotalComFrete, // Certifique-se que é o nome da variável do valor total
+      cliente: nomeCliente,
+      telefone: document.getElementById('cliente-telefone')?.value || document.getElementById('telefoneCliente')?.value || '',
+      endereco: document.getElementById('cliente-endereco')?.value || document.getElementById('enderecoCliente')?.value || '',
+      bairro: document.getElementById('cliente-bairro')?.value || document.getElementById('bairroFrete')?.value || '',
+      formaPagamento: document.getElementById('forma-pagamento')?.value || document.getElementById('formaPagamento')?.value || '',
+      troco: document.getElementById('troco-para')?.value || document.getElementById('trocoPara')?.value || 'Não',
+      itens: Array.isArray(carrinho) ? carrinho : [],
+      total: totalCalculado,
       dataHora: new Date().toLocaleString('pt-BR')
     };
 
@@ -920,31 +939,32 @@
       console.warn('Erro ao enviar para API de impressão:', erro);
     }
 
-    // Monta o texto para o WhatsApp
+    // Monta o texto formatado para o WhatsApp
     let mensagem = `*NOVO PEDIDO - BRABO'S BURGUER*\n\n`;
     mensagem += `*Cliente:* ${pedidoData.cliente}\n`;
     if (pedidoData.telefone) mensagem += `*Telefone:* ${pedidoData.telefone}\n`;
-    mensagem += `*Endereço:* ${pedidoData.endereco} (${pedidoData.bairro})\n`;
-    mensagem += `*Forma de Pagamento:* ${pedidoData.formaPagamento}\n`;
+    if (pedidoData.endereco) mensagem += `*Endereço:* ${pedidoData.endereco}\n`;
+    if (pedidoData.formaPagamento) mensagem += `*Pagamento:* ${pedidoData.formaPagamento}\n`;
     if (pedidoData.troco !== 'Não') mensagem += `*Troco para:* R$ ${pedidoData.troco}\n`;
     
     mensagem += `\n*ITENS:* \n`;
-    carrinho.forEach(item => {
-      mensagem += `• ${item.qtd}x ${item.nome} - R$ ${(item.preco * item.qtd).toFixed(2)}\n`;
-      if (item.observacao) mensagem += `  _Obs: ${item.observacao}_\n`;
-    });
+    if (Array.isArray(carrinho)) {
+      carrinho.forEach(item => {
+        const qtd = item.qtd || 1;
+        const preco = item.preco || 0;
+        mensagem += `• ${qtd}x ${item.nome} - R$ ${(preco * qtd).toFixed(2)}\n`;
+        if (item.observacao) mensagem += `  _Obs: ${item.observacao}_\n`;
+      });
+    }
 
     mensagem += `\n*TOTAL:* R$ ${pedidoData.total.toFixed(2)}`;
 
-    // Redireciona para o WhatsApp
-    const foneLoja = '5531999999999'; // Insira o número oficial da loja com DDD
+    // Redireciona para o WhatsApp da lanchonete
+    const foneLoja = '5531999999999'; // Substitua pelo número com DDD da lanchonete
     const urlWhatsapp = `https://wa.me/${foneLoja}?text=${encodeURIComponent(mensagem)}`;
     
     window.open(urlWhatsapp, '_blank');
   }
-
-  // 3. Vincule a função ao clique do seu botão de finalizar pedido:
-  // Exemplo: document.getElementById('btnFinalizar').addEventListener('click', enviarPedido);
 </script>
 <!-- Final do index.html -->
 <script>
