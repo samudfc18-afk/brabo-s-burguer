@@ -29,7 +29,7 @@
                 <span class="text-xs text-gray-400 block">📍 Rua União, 280 - Santa Rita de Cássia</span>
                 <span class="text-[11px] text-amber-400/90 font-medium block">⏰ Seg, Ter, Qui, Sex, Sáb e Dom: 18h às 23h30</span>
             </div>
-            <div class="bg-amber-500/10 text-amber-400 text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1 border border-amber-500/20 flex-shrink-0">
+           <div id="status-loja" class="bg-amber-500/10 text-amber-400 text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1 border border-amber-500/20 flex-shrink-0">
                 <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> Aberto
             </div>
         </div>
@@ -493,37 +493,63 @@
 
             <div class="space-y-3">
                 <div>
-                    <label class="block text-xs font-semibold text-gray-300 mb-1">Seu Nome:</label>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Seu Nome *</label>
                     <input type="text" id="cliente-nome" placeholder="Ex: João Silva" class="w-full bg-darkBg border border-gray-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-primary">
                 </div>
 
+                <!-- Forma de Recebimento -->
                 <div>
-                    <label class="block text-xs font-semibold text-gray-300 mb-1">Endereço de Entrega (ou Retirada):</label>
-                    <input type="text" id="cliente-endereco" placeholder="Rua, Número, Bairro e Ponto de Referência" class="w-full bg-darkBg border border-gray-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-primary">
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Forma de Recebimento *</label>
+                    <select id="tipo-entrega" onchange="atualizarOpcoesEntrega()" class="w-full bg-darkBg border border-gray-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-primary">
+                        <option value="retirada">Retirada na Loja (Grátis)</option>
+                        <option value="entrega">Entrega via Motoboy</option>
+                    </select>
                 </div>
 
-                <div>
-                    <label class="block text-xs font-semibold text-gray-300 mb-1">Forma de Pagamento:</label>
-                    <select id="cliente-pagamento" class="w-full bg-darkBg border border-gray-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-primary">
-                        <option value="Pix">Pix</option>
-                        <option value="Cartão de Crédito">Cartão de Crédito</option>
-                        <option value="Cartão de Débito">Cartão de Débito</option>
-                        <option value="Dinheiro">Dinheiro (com troco)</option>
+                <!-- Seleção de Região (Apenas para Entrega) -->
+                <div id="box-regiao" class="hidden">
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Selecione sua Região / Bairro *</label>
+                    <select id="cliente-regiao" onchange="atualizarFreteETotal()" class="w-full bg-darkBg border border-gray-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-primary">
+                        <option value="3.00">Morro do Papagaio (+ R$ 3,00)</option>
+                        <option value="4.00">Predinho São Bento (+ R$ 4,00)</option>
+                        <option value="10.00">Vila Acaba Mundo (+ R$ 10,00)</option>
+                        <option value="12.00">Conjunto Santa Maria (+ R$ 12,00)</option>
+                        <option value="15.00">Morro das Pedras (+ R$ 15,00)</option>
                     </select>
+                </div>
+
+                <!-- Campo Endereço (Apenas para Entrega) -->
+                <div id="box-endereco" class="hidden">
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Endereço Completo de Entrega *</label>
+                    <input type="text" id="cliente-endereco" placeholder="Rua, número, ap/bloco e ponto de referência" class="w-full bg-darkBg border border-gray-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-primary">
+                </div>
+
+                <!-- Forma de Pagamento -->
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Forma de Pagamento *</label>
+                    <select id="cliente-pagamento" onchange="toggleCampoTroco()" class="w-full bg-darkBg border border-gray-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-primary">
+                        <option value="Pix na Maquininha">Pix na Maquininha</option>
+                        <option value="Débito na Maquininha">Débito na Maquininha</option>
+                        <option value="Crédito na Maquininha">Crédito na Maquininha</option>
+                        <option value="Dinheiro">Dinheiro</option>
+                    </select>
+                </div>
+
+                <!-- Campo Troco (Apenas para Dinheiro) -->
+                <div id="box-troco" class="hidden">
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Troco para quanto?</label>
+                    <input type="text" id="cliente-troco" placeholder="Ex: Troco para R$ 50,00 ou Não preciso" class="w-full bg-darkBg border border-gray-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-primary">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold text-gray-300 mb-1">Observações Gerais do Pedido:</label>
-                    <textarea id="cliente-obs" placeholder="Ex: Entregar na campainha..." class="w-full bg-darkBg border border-gray-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-primary h-20"></textarea>
+                    <textarea id="cliente-obs" placeholder="Ex: Entregar na campainha..." class="w-full bg-darkBg border border-gray-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-primary h-16"></textarea>
                 </div>
 
                 <button onclick="enviarWhatsApp()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl text-sm shadow-md transition flex items-center justify-center gap-2 mt-4">
                     Enviar Pedido pelo WhatsApp 📱
                 </button>
             </div>
-        </div>
-    </div>
-
     <!-- SCRIPT DE CARRINHO E INTERAÇÃO -->
     <script>
         let carrinho = [];
@@ -640,7 +666,7 @@
             }
         }
 
-        function abrirCheckout() {
+         function abrirCheckout() {
             const resumo = document.getElementById('resumo-sacola');
             resumo.innerHTML = carrinho.map((item, index) => `
                 <div class="flex justify-between items-center py-1.5 border-b border-gray-800/50">
@@ -678,37 +704,146 @@
             document.getElementById('modal-checkout').classList.add('hidden');
         }
 
+        function atualizarOpcoesEntrega() {
+            const tipo = document.getElementById('tipo-entrega').value;
+            const boxRegiao = document.getElementById('box-regiao');
+            const boxEndereco = document.getElementById('box-endereco');
+
+            if (tipo === 'entrega') {
+                boxRegiao.classList.remove('hidden');
+                boxEndereco.classList.remove('hidden');
+            } else {
+                boxRegiao.classList.add('hidden');
+                boxEndereco.classList.add('hidden');
+            }
+            atualizarFreteETotal();
+        }
+
+        function toggleCampoTroco() {
+            const pagamento = document.getElementById('cliente-pagamento').value;
+            const boxTroco = document.getElementById('box-troco');
+
+            if (pagamento === 'Dinheiro') {
+                boxTroco.classList.remove('hidden');
+            } else {
+                boxTroco.classList.add('hidden');
+            }
+        }
+
+        function atualizarFreteETotal() {
+            const tipo = document.getElementById('tipo-entrega').value;
+            const regiaoSelect = document.getElementById('cliente-regiao');
+            let taxaFrete = 0;
+
+            if (tipo === 'entrega') {
+                taxaFrete = parseFloat(regiaoSelect.value) || 0;
+            }
+
+            const totalProdutos = carrinho.reduce((sum, item) => sum + (item.price * item.qtd), 0);
+            const totalGeral = totalProdutos + taxaFrete;
+
+            const resumo = document.getElementById('resumo-sacola');
+            let htmlResumo = carrinho.map((item, index) => `
+                <div class="flex justify-between items-center py-1.5 border-b border-gray-800/50">
+                    <div>
+                        <span class="font-bold text-white">${item.qtd}x ${item.descricao}</span>
+                        <span class="block text-[10px] text-gray-400">R$ ${item.price.toFixed(2).replace('.', ',')} un</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-semibold text-white">R$ ${(item.price * item.qtd).toFixed(2).replace('.', ',')}</span>
+                        <button onclick="removerItem(${index})" class="text-red-400 hover:text-red-300 text-xs px-1.5 py-0.5 bg-red-500/10 rounded border border-red-500/20">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+
+            htmlResumo += `
+                <div class="pt-2 mt-2 space-y-1 text-xs border-t border-gray-800">
+                    <div class="flex justify-between text-gray-400">
+                        <span>Subtotal dos Itens:</span>
+                        <span>R$ ${totalProdutos.toFixed(2).replace('.', ',')}</span>
+                    </div>
+                    <div class="flex justify-between text-amber-400 font-medium">
+                        <span>Taxa de Entrega:</span>
+                        <span>${tipo === 'entrega' ? `R$ ${taxaFrete.toFixed(2).replace('.', ',')}` : 'Grátis (Retirada)'}</span>
+                    </div>
+                    <div class="flex justify-between text-white font-extrabold text-sm pt-1 border-t border-gray-700">
+                        <span>Total do Pedido:</span>
+                        <span>R$ ${totalGeral.toFixed(2).replace('.', ',')}</span>
+                    </div>
+                </div>
+            `;
+
+            resumo.innerHTML = htmlResumo;
+        }
+
+        function abrirCheckout() {
+            atualizarOpcoesEntrega();
+            toggleCampoTroco();
+            document.getElementById('modal-checkout').classList.remove('hidden');
+        }
+
         function enviarWhatsApp() {
             const nome = document.getElementById('cliente-nome').value.trim();
+            const tipoEntrega = document.getElementById('tipo-entrega').value;
+            const regiaoSelect = document.getElementById('cliente-regiao');
+            const regiaoNome = regiaoSelect.options[regiaoSelect.selectedIndex].text;
+            const taxaFrete = tipoEntrega === 'entrega' ? parseFloat(regiaoSelect.value) : 0;
             const endereco = document.getElementById('cliente-endereco').value.trim();
             const pagamento = document.getElementById('cliente-pagamento').value;
+            const troco = document.getElementById('cliente-troco').value.trim();
             const obs = document.getElementById('cliente-obs').value.trim();
 
-            if (!nome || !endereco) {
-                alert('Por favor, preencha seu nome e endereço de entrega.');
+            if (!nome) {
+                alert('Por favor, informe seu nome.');
+                return;
+            }
+
+            if (tipoEntrega === 'entrega' && !endereco) {
+                alert('Por favor, preencha o endereço completo para entrega.');
                 return;
             }
 
             let mensagem = `🍔 *NOVO PEDIDO - BRABO'S BURGUER*\n\n`;
             mensagem += `👤 *Cliente:* ${nome}\n`;
-            mensagem += `📍 *Endereço:* ${endereco}\n`;
-            mensagem += `💳 *Pagamento:* ${pagamento}\n`;
-            if (obs) mensagem += `📝 *Obs Gerais:* ${obs}\n`;
+            
+            if (tipoEntrega === 'entrega') {
+                mensagem += `🛵 *Tipo:* Entrega via Motoboy\n`;
+                mensagem += `📍 *Região:* ${regiaoNome}\n`;
+                mensagem += `🏠 *Endereço:* ${endereco}\n`;
+            } else {
+                mensagem += `🏪 *Tipo:* Retirada na Loja\n`;
+            }
+
+            mensagem += `💳 *Forma de Pagamento:* ${pagamento}\n`;
+            if (pagamento === 'Dinheiro' && troco) {
+                mensagem += `💵 *Troco:* ${troco}\n`;
+            }
+            if (obs) {
+                mensagem += `📝 *Obs Gerais:* ${obs}\n`;
+            }
+
             mensagem += `\n*ITENS DO PEDIDO:*\n`;
 
             carrinho.forEach(item => {
                 mensagem += `• ${item.qtd}x ${item.descricao} - R$ ${(item.price * item.qtd).toFixed(2).replace('.', ',')}\n`;
             });
 
-            const totalPreco = carrinho.reduce((sum, item) => sum + (item.price * item.qtd), 0);
-            mensagem += `\n*Total a pagar:* R$ ${totalPreco.toFixed(2).replace('.', ',')}`;
+            const totalProdutos = carrinho.reduce((sum, item) => sum + (item.price * item.qtd), 0);
+            const totalGeral = totalProdutos + taxaFrete;
+
+            mensagem += `\n*Subtotal:* R$ ${totalProdutos.toFixed(2).replace('.', ',')}`;
+            if (tipoEntrega === 'entrega') {
+                mensagem += `\n*Taxa de Entrega:* R$ ${taxaFrete.toFixed(2).replace('.', ',')}`;
+            } else {
+                mensagem += `\n*Taxa de Entrega:* Grátis (Retirada)`;
+            }
+            mensagem += `\n*Total a Pagar:* R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
 
             const numeroWhatsApp = '5531997401932';
             const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
             
             window.open(url, '_blank');
         }
-
         function filtrarCategoria(categoria) {
             document.querySelectorAll('.cat-btn').forEach(btn => {
                 btn.classList.remove('bg-primary', 'text-gray-950', 'font-bold');
@@ -725,6 +860,34 @@
                 }
             });
         }
+        function verificarStatusLoja() {
+            const agora = new Date();
+            const diaSemana = agora.getDay(); // 0 = Dom, 1 = Seg, 2 = Ter, 3 = Qua, 4 = Qui, 5 = Sex, 6 = Sáb
+            const horas = agora.getHours();
+            const minutos = agora.getMinutes();
+
+            // Converte o horário atual para minutos do dia para facilitar a comparação
+            const minutosAtuais = horas * 60 + minutos;
+            const inicioExpediente = 18 * 60;       // 18:00 (1080 min)
+            const fimExpediente = 23 * 60 + 30;    // 23:30 (1410 min)
+
+            // Quarta-feira (dia 3) é fechado
+            const ehQuartaFeira = (diaSemana === 3);
+            const dentroDoHorario = (minutosAtuais >= inicioExpediente && minutosAtuais <= fimExpediente);
+
+            const statusEl = document.getElementById('status-loja');
+
+            if (!ehQuartaFeira && dentroDoHorario) {
+                statusEl.className = "bg-amber-500/10 text-amber-400 text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1 border border-amber-500/20 flex-shrink-0";
+                statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> Aberto`;
+            } else {
+                statusEl.className = "bg-red-500/10 text-red-400 text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1 border border-red-500/20 flex-shrink-0";
+                statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-400"></span> Fechado`;
+            }
+        }
+
+        // Executa a verificação assim que a página carrega
+        verificarStatusLoja();
     </script>
 </body>
 </html>
