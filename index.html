@@ -891,135 +891,176 @@
     </script>
     <!-- Final do seu index.html -->
 <script>
-  // 1. URL da sua API no Render
-  const API_RENDER_URL = 'https://brabo-s-burguer-api.onrender.com/api/pedidos';
+const API_RENDER_URL = 'https://brabo-s-burguer-api.onrender.com/api/pedidos';
 
-  // 2. Função de envio corrigida
-  async function enviarPedido() {
-    // Busca o nome usando os IDs do seu HTML (cliente-nome ou nomeCliente)
-    const nomeCliente = document.getElementById('cliente-nome')?.value.trim() || 
-                        document.getElementById('nomeCliente')?.value.trim() || '';
+async function enviarPedido() {
+  const nomeCliente = document.getElementById('cliente-nome')?.value.trim() || 
+                      document.getElementById('nomeCliente')?.value.trim() || '';
 
-    if (!nomeCliente) {
-      alert('Por favor, informe seu nome para finalizar o pedido.');
-      return;
-    }
-
-    // Calcula o valor total com segurança se a variável global não existir
-    let totalCalculado = 0;
-    if (typeof valorTotalComFrete !== 'undefined') {
-      totalCalculado = valorTotalComFrete;
-    } else if (typeof valorTotal !== 'undefined') {
-      totalCalculado = valorTotal;
-    } else if (Array.isArray(carrinho)) {
-      totalCalculado = carrinho.reduce((acc, item) => acc + ((item.preco || 0) * (item.qtd || 1)), 0);
-    }
-
-    // Coleta dados dos inputs do formulário de checkout
-    const pedidoData = {
-      cliente: nomeCliente,
-      telefone: document.getElementById('cliente-telefone')?.value || document.getElementById('telefoneCliente')?.value || '',
-      endereco: document.getElementById('cliente-endereco')?.value || document.getElementById('enderecoCliente')?.value || '',
-      bairro: document.getElementById('cliente-bairro')?.value || document.getElementById('bairroFrete')?.value || '',
-      formaPagamento: document.getElementById('forma-pagamento')?.value || document.getElementById('formaPagamento')?.value || '',
-      troco: document.getElementById('troco-para')?.value || document.getElementById('trocoPara')?.value || 'Não',
-      itens: Array.isArray(carrinho) ? carrinho : [],
-      total: totalCalculado,
-      dataHora: new Date().toLocaleString('pt-BR')
-    };
-
-    // Dispara a requisição em segundo plano para a API do Render (impressora)
-    try {
-      fetch(API_RENDER_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(pedidoData)
-      });
-    } catch (erro) {
-      console.warn('Erro ao enviar para API de impressão:', erro);
-    }
-
-    // Monta o texto formatado para o WhatsApp
-    let mensagem = `*NOVO PEDIDO - BRABO'S BURGUER*\n\n`;
-    mensagem += `*Cliente:* ${pedidoData.cliente}\n`;
-    if (pedidoData.telefone) mensagem += `*Telefone:* ${pedidoData.telefone}\n`;
-    if (pedidoData.endereco) mensagem += `*Endereço:* ${pedidoData.endereco}\n`;
-    if (pedidoData.formaPagamento) mensagem += `*Pagamento:* ${pedidoData.formaPagamento}\n`;
-    if (pedidoData.troco !== 'Não') mensagem += `*Troco para:* R$ ${pedidoData.troco}\n`;
-    
-    mensagem += `\n*ITENS:* \n`;
-    if (Array.isArray(carrinho)) {
-      carrinho.forEach(item => {
-        const qtd = item.qtd || 1;
-        const preco = item.preco || 0;
-        mensagem += `• ${qtd}x ${item.nome} - R$ ${(preco * qtd).toFixed(2)}\n`;
-        if (item.observacao) mensagem += `  _Obs: ${item.observacao}_\n`;
-      });
-    }
-
-    mensagem += `\n*TOTAL:* R$ ${pedidoData.total.toFixed(2)}`;
-
-    // Redireciona para o WhatsApp da lanchonete
-    const foneLoja = '553197401932'; // Substitua pelo número com DDD da lanchonete
-    const urlWhatsapp = `https://wa.me/${foneLoja}?text=${encodeURIComponent(mensagem)}`;
-    
-    window.open(urlWhatsapp, '_blank');
+  if (!nomeCliente) {
+    alert('Por favor, informe seu nome para finalizar o pedido.');
+    return;
   }
+
+  // Mapeia os itens do carrinho tratando todos os nomes de propriedades possíveis
+  let itensFormatados = [];
+  let totalCalculado = 0;
+
+  if (Array.isArray(carrinho)) {
+    itensFormatados = carrinho.map(item => {
+      const nomeItem = item.nome || item.titulo || item.item || item.descricao || 'Item sem nome';
+      const quantidade = item.qtd || item.quantidade || item.qtdItem || 1;
+      const precoUnitario = parseFloat(item.preco || item.valor || item.precoUnitario || 0);
+
+      totalCalculado += (precoUnitario * quantidade);
+
+      return {
+        nome: nomeItem,
+        qtd: quantidade,
+        preco: precoUnitario,
+        observacao: item.observacao || item.obs || ''
+      };
+    });
+  }
+
+  if (typeof valorTotalComFrete !== 'undefined' && valorTotalComFrete > 0) {
+    totalCalculado = valorTotalComFrete;
+  } else if (typeof valorTotal !== 'undefined' && valorTotal > 0) {
+    totalCalculado = valorTotal;
+  }
+
+  const pedidoData = {
+    cliente: nomeCliente,
+    telefone: document.getElementById('cliente-telefone')?.value || document.getElementById('telefoneCliente')?.value || '',
+    endereco: document.getElementById('cliente-endereco')?.value || document.getElementById('enderecoCliente')?.value || '',
+    bairro: document.getElementById('cliente-bairro')?.value || document.getElementById('bairroFrete')?.value || '',
+    formaPagamento: document.getElementById('forma-pagamento')?.value || document.getElementById('formaPagamento')?.value || '',
+    troco: document.getElementById('troco-para')?.value || document.getElementById('trocoPara')?.value || 'Não',
+    itens: itensFormatados,
+    total: totalCalculado,
+    dataHora: new Date().toLocaleString('pt-BR')
+  };
+
+  // 1. Envia para a API no Render (Impressora)
+  try {
+    fetch(API_RENDER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(pedidoData)
+    });
+  } catch (erro) {
+    console.warn('Erro ao enviar para a API de impressão:', erro);
+  }
+
+  // 2. Monta o texto para o WhatsApp
+  let mensagem = `*NOVO PEDIDO - BRABO'S BURGUER*\n\n`;
+  mensagem += `*Cliente:* ${pedidoData.cliente}\n`;
+  if (pedidoData.telefone) mensagem += `*Telefone:* ${pedidoData.telefone}\n`;
+  if (pedidoData.endereco) mensagem += `*Endereço:* ${pedidoData.endereco}\n`;
+  if (pedidoData.formaPagamento) mensagem += `*Pagamento:* ${pedidoData.formaPagamento}\n`;
+  if (pedidoData.troco !== 'Não') mensagem += `*Troco para:* R$ ${pedidoData.troco}\n`;
+  
+  mensagem += `\n*ITENS:* \n`;
+  pedidoData.itens.forEach(item => {
+    mensagem += `• ${item.qtd}x ${item.nome} - R$ ${(item.preco * item.qtd).toFixed(2)}\n`;
+    if (item.observacao) mensagem += `  _Obs: ${item.observacao}_\n`;
+  });
+
+  mensagem += `\n*TOTAL:* R$ ${pedidoData.total.toFixed(2)}`;
+
+  // 3. Abre no WhatsApp oficial do Brabo's Burguer
+  const foneLoja = '553197401932'; 
+  const urlWhatsapp = `https://wa.me/${foneLoja}?text=${encodeURIComponent(mensagem)}`;
+  
+  window.open(urlWhatsapp, '_blank');
+}
 </script>
 <!-- Final do index.html -->
 <script>
-  // ... seus outros códigos do cardápio continuam aqui em cima ...
+ const API_RENDER_URL = 'https://brabo-s-burguer-api.onrender.com/api/pedidos';
 
-  const API_RENDER_URL = 'https://brabo-s-burguer-api.onrender.com/api/pedidos';
+async function enviarPedido() {
+  const nomeCliente = document.getElementById('cliente-nome')?.value.trim() || 
+                      document.getElementById('nomeCliente')?.value.trim() || '';
 
-  async function enviarPedido() {
-    const nomeCliente = document.getElementById('cliente-nome')?.value.trim();
-
-    if (!nomeCliente) {
-      alert('Por favor, informe seu nome.');
-      return;
-    }
-
-    const pedidoData = {
-      cliente: nomeCliente,
-      telefone: document.getElementById('cliente-telefone')?.value || '',
-      endereco: document.getElementById('cliente-endereco')?.value || '',
-      bairro: document.getElementById('cliente-bairro')?.value || '',
-      formaPagamento: document.getElementById('forma-pagamento')?.value || '',
-      troco: document.getElementById('troco-para')?.value || 'Não',
-      itens: carrinho, 
-      total: typeof valorTotal !== 'undefined' ? valorTotal : 0,
-      dataHora: new Date().toLocaleString('pt-BR')
-    };
-
-    try {
-      fetch(API_RENDER_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(pedidoData)
-      });
-    } catch (erro) {
-      console.warn('Erro ao enviar para API de impressão:', erro);
-    }
-
-    let mensagem = `*NOVO PEDIDO - BRABO'S BURGUER*\n\n`;
-    mensagem += `*Cliente:* ${pedidoData.cliente}\n`;
-    if (pedidoData.telefone) mensagem += `*Telefone:* ${pedidoData.telefone}\n`;
-    if (pedidoData.endereco) mensagem += `*Endereço:* ${pedidoData.endereco}\n`;
-    if (pedidoData.formaPagamento) mensagem += `*Pagamento:* ${pedidoData.formaPagamento}\n`;
-    
-    mensagem += `\n*ITENS:* \n`;
-    if (Array.isArray(carrinho)) {
-      carrinho.forEach(item => {
-        mensagem += `• ${item.qtd || 1}x ${item.nome} - R$ ${((item.preco || 0) * (item.qtd || 1)).toFixed(2)}\n`;
-      });
-    }
-
-    const foneLoja = '5531999999999'; // Número da lanchonete com DDD
-    const urlWhatsapp = `https://wa.me/${foneLoja}?text=${encodeURIComponent(mensagem)}`;
-    
-    window.open(urlWhatsapp, '_blank');
+  if (!nomeCliente) {
+    alert('Por favor, informe seu nome para finalizar o pedido.');
+    return;
   }
+
+  // Mapeia os itens do carrinho com os campos reais: descricao e price
+  let itensFormatados = [];
+  let totalCalculado = 0;
+
+  if (Array.isArray(carrinho)) {
+    itensFormatados = carrinho.map(item => {
+      const nomeItem = item.descricao || item.nome || item.titulo || 'Item sem nome';
+      const quantidade = item.qtd || item.quantidade || 1;
+      const precoUnitario = parseFloat(item.price || item.preco || 0);
+
+      totalCalculado += (precoUnitario * quantidade);
+
+      return {
+        nome: nomeItem,
+        qtd: quantidade,
+        preco: precoUnitario,
+        observacao: item.observacao || item.obs || ''
+      };
+    });
+  }
+
+  // Define o valor total do pedido
+  if (typeof valorTotalComFrete !== 'undefined' && valorTotalComFrete > 0) {
+    totalCalculado = valorTotalComFrete;
+  } else if (typeof valorTotal !== 'undefined' && valorTotal > 0) {
+    totalCalculado = valorTotal;
+  }
+
+  const pedidoData = {
+    cliente: nomeCliente,
+    telefone: document.getElementById('cliente-telefone')?.value || document.getElementById('telefoneCliente')?.value || '',
+    endereco: document.getElementById('cliente-endereco')?.value || document.getElementById('enderecoCliente')?.value || '',
+    bairro: document.getElementById('cliente-bairro')?.value || document.getElementById('bairroFrete')?.value || '',
+    formaPagamento: document.getElementById('forma-pagamento')?.value || document.getElementById('formaPagamento')?.value || '',
+    troco: document.getElementById('troco-para')?.value || document.getElementById('trocoPara')?.value || 'Não',
+    itens: itensFormatados,
+    total: totalCalculado,
+    dataHora: new Date().toLocaleString('pt-BR')
+  };
+
+  // 1. Envia requisição para a API no Render (Impressora)
+  try {
+    fetch(API_RENDER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(pedidoData)
+    });
+  } catch (erro) {
+    console.warn('Erro ao enviar para a API de impressão:', erro);
+  }
+
+  // 2. Monta o texto formatado para o WhatsApp
+  let mensagem = `*NOVO PEDIDO - BRABO'S BURGUER*\n\n`;
+  mensagem += `*Cliente:* ${pedidoData.cliente}\n`;
+  if (pedidoData.telefone) mensagem += `*Telefone:* ${pedidoData.telefone}\n`;
+  if (pedidoData.endereco) mensagem += `*Endereço:* ${pedidoData.endereco}\n`;
+  if (pedidoData.formaPagamento) mensagem += `*Pagamento:* ${pedidoData.formaPagamento}\n`;
+  if (pedidoData.troco !== 'Não') mensagem += `*Troco para:* R$ ${pedidoData.troco}\n`;
+  
+  mensagem += `\n*ITENS:* \n`;
+  pedidoData.itens.forEach(item => {
+    mensagem += `• ${item.qtd}x ${item.nome} - R$ ${(item.preco * item.qtd).toFixed(2)}\n`;
+    if (item.observacao) mensagem += `  _Obs: ${item.observacao}_\n`;
+  });
+
+  mensagem += `\n*TOTAL:* R$ ${pedidoData.total.toFixed(2)}`;
+
+  // 3. Abre no WhatsApp oficial do Brabo's Burguer
+  const foneLoja = '553197401932'; 
+  const urlWhatsapp = `https://wa.me/${foneLoja}?text=${encodeURIComponent(mensagem)}`;
+  
+  window.open(urlWhatsapp, '_blank');
+}
 </script>
 </body>
 </body>
