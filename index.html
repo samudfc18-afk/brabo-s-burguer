@@ -265,6 +265,22 @@
             </div>
         </div>
 
+        
+        <!-- Batata Tradicional -->
+        <div class="produto-card bg-cardBg p-3 rounded-2xl shadow-sm border border-gray-800 flex justify-between items-center gap-3 cursor-pointer hover:border-primary/50 transition" 
+             data-cat="porcoes" onclick="abrirDetalhes('Batata Tradicional', 10.00, 'Porção de batata frita sequinha e crocante na medida certa.', './img/batata-tradicional.jpeg')">
+            <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">Batata Tradicional</h3>
+                <p class="text-xs text-gray-400 mt-1 line-clamp-2">Porção de batata frita sequinha e crocante na medida certa.</p>
+                <span class="text-sm font-extrabold text-primary mt-2 block">R$ 10,00</span>
+            </div>
+            <div class="w-20 h-20 bg-gray-800 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 relative overflow-hidden border border-gray-700">
+                <img src="./img/batata-tradicional.jpeg" alt="Batata Tradicional" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div class="absolute inset-0 hidden items-center justify-center text-xl">🍟</div>
+                <div class="absolute bottom-1 right-1 bg-primary text-gray-950 w-6 h-6 rounded-full flex items-center justify-center text-xs font-extrabold shadow">+</div>
+            </div>
+        </div>
+
 
         <!-- --- BEBIDAS --- -->
 
@@ -481,12 +497,12 @@
         </div>
     </div>
 
-    <!-- MODAL DE CHECKOUT -->
+    <!--<!-- MODAL DE CHECKOUT -->
     <div id="modal-checkout" class="fixed inset-0 bg-black/75 z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="bg-cardBg border border-gray-800 w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-lg font-bold text-white">Finalizar Pedido</h2>
-                <button onclick="fecharCheckout()" class="text-gray-400 hover:text-white font-bold text-xl">&times;</button>
+                <button type="button" onclick="fecharCheckout()" class="text-gray-400 hover:text-white font-bold text-xl">&times;</button>
             </div>
 
             <div id="resumo-sacola" class="bg-darkBg p-3 rounded-xl mb-4 text-xs space-y-1 border border-gray-800 text-gray-300"></div>
@@ -517,17 +533,19 @@
                         <option value="15.00">Morro das Pedras (+ R$ 15,00)</option>
                     </select>
                 </div>
-              <!-- Campo Endereço (Apenas para Entrega) -->
-<div id="box-endereco" class="hidden">
-    <label class="block text-xs font-semibold text-gray-300 mb-1">Endereço Completo de Entrega *</label>
-    <input type="text" id="cliente-endereco" placeholder="Rua, número, ap/bloco e ponto de referência" class="w-full bg-darkBg border border-gray-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-primary">
-</div>
 
-<!-- Campo Telefone -->
-<div>
-    <label for="cliente-telefone" class="block text-xs font-semibold text-gray-300 mb-1">WhatsApp / Telefone (para o motoboy) *</label>
-    <input type="tel" id="cliente-telefone" placeholder="(31) 99999-9999" required class="w-full bg-darkBg border border-gray-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-primary">
-</div>
+                <!-- Campo Endereço (Apenas para Entrega) -->
+                <div id="box-endereco" class="hidden">
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Endereço Completo de Entrega *</label>
+                    <input type="text" id="cliente-endereco" placeholder="Rua, número, ap/bloco e ponto de referência" class="w-full bg-darkBg border border-gray-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-primary">
+                </div>
+
+                <!-- Campo Telefone -->
+                <div>
+                    <label for="cliente-telefone" class="block text-xs font-semibold text-gray-300 mb-1">WhatsApp / Telefone (para o motoboy) *</label>
+                    <input type="tel" id="cliente-telefone" placeholder="(31) 99999-9999" required class="w-full bg-darkBg border border-gray-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-primary">
+                </div>
+
                 <!-- Forma de Pagamento -->
                 <div>
                     <label class="block text-xs font-semibold text-gray-300 mb-1">Forma de Pagamento *</label>
@@ -550,12 +568,38 @@
                     <textarea id="cliente-obs" placeholder="Ex: Entregar na campainha..." class="w-full bg-darkBg border border-gray-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-primary h-16"></textarea>
                 </div>
 
-                <button onclick="enviarPedido()" class="w-full bg-primary text-white font-bold py-3 rounded-xl hover:opacity-90 transition shadow-lg shadow-primary/20 mt-4">
-    Concluir Pedido via WhatsApp
+                <button type="button" id="btn-finalizar-pedido" onclick="enviarPedido()" class="w-full bg-primary text-gray-950 font-bold py-3 rounded-xl hover:opacity-90 transition shadow-lg shadow-primary/20 mt-4">
+                    Concluir Pedido
                 </button>
             </div>
-    <!-- SCRIPT DE CARRINHO E INTERAÇÃO -->
+        </div>
+    </div>
+
+    <!-- MODAL DE CONFIRMAÇÃO DE SUCESSO -->
+    <div id="modal-sucesso" class="fixed inset-0 bg-black/85 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-cardBg border border-green-500/40 w-full max-w-sm rounded-2xl p-6 text-center space-y-4 shadow-2xl">
+            <div class="w-16 h-16 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mx-auto text-3xl">
+                ✅
+            </div>
+            <h3 class="text-xl font-extrabold text-white">Pedido Confirmado!</h3>
+            <p class="text-xs text-gray-300 leading-relaxed">
+                Seu pedido já foi recebido pela cozinha do <strong>Brabo's Burguer</strong> e está sendo preparado!
+            </p>
+            <p class="text-[11px] text-amber-400">
+                Clique abaixo para enviar também o resumo no nosso WhatsApp:
+            </p>
+            <a id="link-whatsapp-sucesso" href="#" target="_blank" onclick="fecharModalSucesso()" class="block w-full bg-green-500 hover:bg-green-600 text-gray-950 font-bold py-3 rounded-xl text-sm shadow transition">
+                Abrir WhatsApp da Loja 📲
+            </a>
+            <button type="button" onclick="fecharModalSucesso()" class="text-xs text-gray-400 hover:text-white underline pt-1">
+                Fechar e voltar ao cardápio
+            </button>
+        </div>
+    </div>
+
+    <!-- SCRIPT DE CARRINHO, HORÁRIO E ENVIO -->
     <script>
+        const API_RENDER_URL = 'https://brabo-s-burguer-api.onrender.com/api/pedidos';
         let carrinho = [];
         let produtoSelecionado = { name: '', price: 0, desc: '', img: '' };
         let qtdModal = 1;
@@ -575,6 +619,46 @@
             { name: 'Milho', price: 2.00 },
             { name: 'Ovo', price: 2.00 }
         ];
+
+        function lojaEstaAberta() {
+            const agora = new Date();
+            const diaSemana = agora.getDay(); // 0=Dom, 1=Seg, 2=Ter, 3=Qua, 4=Qui, 5=Sex, 6=Sab
+            const minutosAtuais = agora.getHours() * 60 + agora.getMinutes();
+            const inicioExpediente = 18 * 60;      // 18:00 (1080 min)
+            const fimExpediente = 23 * 60 + 30;    // 23:30 (1410 min)
+
+            const ehQuartaFeira = (diaSemana === 3);
+            const dentroDoHorario = (minutosAtuais >= inicioExpediente && minutosAtuais <= fimExpediente);
+
+            return (!ehQuartaFeira && dentroDoHorario);
+        }
+
+        function verificarStatusLoja() {
+            const statusEl = document.getElementById('status-loja');
+            const btnFinalizar = document.getElementById('btn-finalizar-pedido');
+
+            if (lojaEstaAberta()) {
+                if (statusEl) {
+                    statusEl.className = "bg-amber-500/10 text-amber-400 text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1 border border-amber-500/20 flex-shrink-0";
+                    statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> Aberto`;
+                }
+                if (btnFinalizar) {
+                    btnFinalizar.disabled = false;
+                    btnFinalizar.className = "w-full bg-primary text-gray-950 font-bold py-3 rounded-xl hover:opacity-90 transition shadow-lg shadow-primary/20 mt-4";
+                    btnFinalizar.innerText = "Concluir Pedido";
+                }
+            } else {
+                if (statusEl) {
+                    statusEl.className = "bg-red-500/10 text-red-400 text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1 border border-red-500/20 flex-shrink-0";
+                    statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-400"></span> Fechado`;
+                }
+                if (btnFinalizar) {
+                    btnFinalizar.disabled = true;
+                    btnFinalizar.className = "w-full bg-gray-700 text-gray-400 font-bold py-3 rounded-xl cursor-not-allowed mt-4";
+                    btnFinalizar.innerText = "Loja Fechada (Abrimos às 18h)";
+                }
+            }
+        }
 
         function abrirDetalhes(nome, preco, desc, img) {
             produtoSelecionado = { name: nome, price: preco, desc: desc, img: img };
@@ -670,35 +754,11 @@
             }
         }
 
-         function abrirCheckout() {
-            const resumo = document.getElementById('resumo-sacola');
-            resumo.innerHTML = carrinho.map((item, index) => `
-                <div class="flex justify-between items-center py-1.5 border-b border-gray-800/50">
-                    <div>
-                        <span class="font-bold text-white">${item.qtd}x ${item.descricao}</span>
-                        <span class="block text-[10px] text-gray-400">R$ ${item.price.toFixed(2).replace('.', ',')} un</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="font-semibold text-white">R$ ${(item.price * item.qtd).toFixed(2).replace('.', ',')}</span>
-                        <button onclick="removerItem(${index})" class="text-red-400 hover:text-red-300 text-xs px-1.5 py-0.5 bg-red-500/10 rounded border border-red-500/20">🗑️</button>
-                    </div>
-                </div>
-            `).join('');
-            
-            const totalPreco = carrinho.reduce((sum, item) => sum + (item.price * item.qtd), 0);
-            resumo.innerHTML += `<div class="pt-3 mt-2 flex justify-between font-bold text-white text-sm border-t border-gray-700">
-                <span>Total:</span>
-                <span>R$ ${totalPreco.toFixed(2).replace('.', ',')}</span>
-            </div>`;
-
-            document.getElementById('modal-checkout').classList.remove('hidden');
-        }
-
         function removerItem(index) {
             carrinho.splice(index, 1);
             atualizarCarrinhoUI();
             if (carrinho.length > 0) {
-                abrirCheckout();
+                atualizarFreteETotal();
             } else {
                 fecharCheckout();
             }
@@ -755,7 +815,7 @@
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="font-semibold text-white">R$ ${(item.price * item.qtd).toFixed(2).replace('.', ',')}</span>
-                        <button onclick="removerItem(${index})" class="text-red-400 hover:text-red-300 text-xs px-1.5 py-0.5 bg-red-500/10 rounded border border-red-500/20">🗑️</button>
+                        <button type="button" onclick="removerItem(${index})" class="text-red-400 hover:text-red-300 text-xs px-1.5 py-0.5 bg-red-500/10 rounded border border-red-500/20">🗑️</button>
                     </div>
                 </div>
             `).join('');
@@ -781,21 +841,22 @@
         }
 
         function abrirCheckout() {
+            verificarStatusLoja();
             atualizarOpcoesEntrega();
             toggleCampoTroco();
             document.getElementById('modal-checkout').classList.remove('hidden');
         }
 
-        function enviarWhatsApp() {
-    enviarPedido();
-}
         function filtrarCategoria(categoria) {
             document.querySelectorAll('.cat-btn').forEach(btn => {
                 btn.classList.remove('bg-primary', 'text-gray-950', 'font-bold');
                 btn.classList.add('bg-cardBg', 'text-gray-300', 'font-medium', 'border', 'border-gray-800');
             });
-            event.target.classList.remove('bg-cardBg', 'text-gray-300', 'font-medium', 'border', 'border-gray-800');
-            event.target.classList.add('bg-primary', 'text-gray-950', 'font-bold');
+            const alvo = window.event ? window.event.target : null;
+            if (alvo) {
+                alvo.classList.remove('bg-cardBg', 'text-gray-300', 'font-medium', 'border', 'border-gray-800');
+                alvo.classList.add('bg-primary', 'text-gray-950', 'font-bold');
+            }
 
             document.querySelectorAll('.produto-card').forEach(card => {
                 if (categoria === 'todos' || card.dataset.cat === categoria) {
@@ -805,128 +866,129 @@
                 }
             });
         }
-        function verificarStatusLoja() {
-            const agora = new Date();
-            const diaSemana = agora.getDay(); // 0 = Dom, 1 = Seg, 2 = Ter, 3 = Qua, 4 = Qui, 5 = Sex, 6 = Sáb
-            const horas = agora.getHours();
-            const minutos = agora.getMinutes();
 
-            // Converte o horário atual para minutos do dia para facilitar a comparação
-            const minutosAtuais = horas * 60 + minutos;
-            const inicioExpediente = 18 * 60;       // 18:00 (1080 min)
-            const fimExpediente = 23 * 60 + 30;    // 23:30 (1410 min)
-
-            // Quarta-feira (dia 3) é fechado
-            const ehQuartaFeira = (diaSemana === 3);
-            const dentroDoHorario = (minutosAtuais >= inicioExpediente && minutosAtuais <= fimExpediente);
-
-            const statusEl = document.getElementById('status-loja');
-
-            if (!ehQuartaFeira && dentroDoHorario) {
-                statusEl.className = "bg-amber-500/10 text-amber-400 text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1 border border-amber-500/20 flex-shrink-0";
-                statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> Aberto`;
-            } else {
-                statusEl.className = "bg-red-500/10 text-red-400 text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1 border border-red-500/20 flex-shrink-0";
-                statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-400"></span> Fechado`;
-            }
+        function fecharModalSucesso() {
+            document.getElementById('modal-sucesso').classList.add('hidden');
+            carrinho = [];
+            atualizarCarrinhoUI();
         }
 
-        // Executa a verificação assim que a página carrega
+        async function enviarPedido() {
+            if (!lojaEstaAberta()) {
+                alert('A loja está fechada no momento! Nosso horário de funcionamento é de Seg a Dom (exceto Quarta) das 18h às 23h30.');
+                return;
+            }
+
+            const nomeCliente = document.getElementById('cliente-nome').value.trim();
+            if (!nomeCliente) {
+                alert('Por favor, informe seu nome para finalizar o pedido.');
+                return;
+            }
+
+            const telefoneCliente = document.getElementById('cliente-telefone').value.trim();
+            if (!telefoneCliente || telefoneCliente.length < 10) {
+                alert('Por favor, informe um número de WhatsApp/telefone válido com DDD.');
+                return;
+            }
+
+            const tipoEntrega = document.getElementById('tipo-entrega').value;
+            const regiaoSelect = document.getElementById('cliente-regiao');
+            const enderecoCliente = document.getElementById('cliente-endereco').value.trim();
+
+            if (tipoEntrega === 'entrega' && !enderecoCliente) {
+                alert('Por favor, informe o endereço completo para entrega.');
+                return;
+            }
+
+            const taxaFrete = tipoEntrega === 'entrega' ? (parseFloat(regiaoSelect.value) || 0) : 0;
+            const nomeBairro = tipoEntrega === 'entrega' ? regiaoSelect.options[regiaoSelect.selectedIndex].text.split(' (+')[0] : 'Retirada na Loja';
+            const formaPagamento = document.getElementById('cliente-pagamento').value;
+            const trocoPara = formaPagamento === 'Dinheiro' ? (document.getElementById('cliente-troco').value.trim() || 'Não precisa') : 'Não';
+            const obsGerais = document.getElementById('cliente-obs').value.trim();
+
+            let subtotal = 0;
+            const itensFormatados = carrinho.map(item => {
+                const precoUnitario = parseFloat(item.price || 0);
+                const quantidade = item.qtd || 1;
+                subtotal += (precoUnitario * quantidade);
+                return {
+                    nome: item.descricao,
+                    qtd: quantidade,
+                    preco: precoUnitario
+                };
+            });
+
+            const totalGeral = subtotal + taxaFrete;
+
+            const pedidoData = {
+                cliente: nomeCliente,
+                telefone: telefoneCliente,
+                tipoEntrega: tipoEntrega === 'entrega' ? 'Entrega' : 'Retirada na Loja',
+                bairro: nomeBairro,
+                endereco: tipoEntrega === 'entrega' ? enderecoCliente : 'Retirada no Balcão',
+                taxaEntrega: taxaFrete,
+                formaPagamento: formaPagamento,
+                troco: trocoPara,
+                observacoes: obsGerais,
+                itens: itensFormatados,
+                subtotal: subtotal,
+                total: totalGeral,
+                dataHora: new Date().toLocaleString('pt-BR')
+            };
+
+            const btn = document.getElementById('btn-finalizar-pedido');
+            btn.disabled = true;
+            btn.innerText = "Enviando pedido para a cozinha...";
+
+            try {
+                const resposta = await fetch(API_RENDER_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(pedidoData)
+                });
+
+                if (resposta.status === 403) {
+                    alert('A loja está fechada no momento.');
+                    verificarStatusLoja();
+                    return;
+                }
+            } catch (erro) {
+                console.warn('Erro ao enviar para a API de impressão:', erro);
+            }
+
+            let mensagem = `*NOVO PEDIDO - BRABO'S BURGUER*\n\n`;
+            mensagem += `*Cliente:* ${pedidoData.cliente}\n`;
+            mensagem += `*Telefone:* ${pedidoData.telefone}\n`;
+            mensagem += `*Tipo:* ${pedidoData.tipoEntrega}\n`;
+            if (tipoEntrega === 'entrega') {
+                mensagem += `*Bairro:* ${pedidoData.bairro}\n`;
+                mensagem += `*Endereço:* ${pedidoData.endereco}\n`;
+            }
+            mensagem += `*Pagamento:* ${pedidoData.formaPagamento}\n`;
+            if (pedidoData.troco !== 'Não') mensagem += `*Troco para:* ${pedidoData.troco}\n`;
+            if (pedidoData.observacoes) mensagem += `*Obs:* ${pedidoData.observacoes}\n`;
+
+            mensagem += `\n*ITENS:*\n`;
+            pedidoData.itens.forEach(item => {
+                mensagem += `• ${item.qtd}x ${item.nome} - R$ ${(item.preco * item.qtd).toFixed(2).replace('.', ',')}\n`;
+            });
+
+            if (taxaFrete > 0) {
+                mensagem += `\n*Taxa de Entrega:* R$ ${taxaFrete.toFixed(2).replace('.', ',')}`;
+            }
+            mensagem += `\n*TOTAL:* R$ ${pedidoData.total.toFixed(2).replace('.', ',')}`;
+
+            const foneLoja = '5531997401932';
+            const urlWhatsapp = `https://wa.me/${foneLoja}?text=${encodeURIComponent(mensagem)}`;
+
+            fecharCheckout();
+            document.getElementById('link-whatsapp-sucesso').href = urlWhatsapp;
+            document.getElementById('modal-sucesso').classList.remove('hidden');
+            verificarStatusLoja();
+        }
+
         verificarStatusLoja();
+        setInterval(verificarStatusLoja, 30000);
     </script>
-    <!-- Final do seu index.html -->
-<!-- Final do index.html -->
-<script>
- const API_RENDER_URL = 'https://brabo-s-burguer-api.onrender.com/api/pedidos';
-
-async function enviarPedido() {
-  const nomeCliente = document.getElementById('cliente-nome')?.value.trim() || 
-                      document.getElementById('nomeCliente')?.value.trim() || '';
-
-  if (!nomeCliente) {
-    alert('Por favor, informe seu nome para finalizar o pedido.');
-    return;
-  }
-  const telefoneCliente = document.getElementById('cliente-telefone').value.trim();
-
-if (!telefoneCliente || telefoneCliente.length < 10) {
-    alert('Por favor, informe um número de WhatsApp/telefone válido com DDD.');
-    return;
-}
-
-  // Mapeia os itens do carrinho com os campos reais: descricao e price
-  let itensFormatados = [];
-  let totalCalculado = 0;
-
-  if (Array.isArray(carrinho)) {
-    itensFormatados = carrinho.map(item => {
-      const nomeItem = item.descricao || item.nome || item.titulo || 'Item sem nome';
-      const quantidade = item.qtd || item.quantidade || 1;
-      const precoUnitario = parseFloat(item.price || item.preco || 0);
-
-      totalCalculado += (precoUnitario * quantidade);
-
-      return {
-        nome: nomeItem,
-        qtd: quantidade,
-        preco: precoUnitario,
-        observacao: item.observacao || item.obs || ''
-      };
-    });
-  }
-
-  // Define o valor total do pedido
-  if (typeof valorTotalComFrete !== 'undefined' && valorTotalComFrete > 0) {
-    totalCalculado = valorTotalComFrete;
-  } else if (typeof valorTotal !== 'undefined' && valorTotal > 0) {
-    totalCalculado = valorTotal;
-  }
-
-  const pedidoData = {
-    cliente: nomeCliente,
-    telefone: document.getElementById('cliente-telefone')?.value || document.getElementById('telefoneCliente')?.value || '',
-    endereco: document.getElementById('cliente-endereco')?.value || document.getElementById('enderecoCliente')?.value || '',
-    bairro: document.getElementById('cliente-bairro')?.value || document.getElementById('bairroFrete')?.value || '',
-    formaPagamento: document.getElementById('forma-pagamento')?.value || document.getElementById('formaPagamento')?.value || '',
-    troco: document.getElementById('troco-para')?.value || document.getElementById('trocoPara')?.value || 'Não',
-    itens: itensFormatados,
-    total: totalCalculado,
-    dataHora: new Date().toLocaleString('pt-BR')
-  };
-
-  // 1. Envia requisição para a API no Render (Impressora)
-  try {
-    fetch(API_RENDER_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(pedidoData)
-    });
-  } catch (erro) {
-    console.warn('Erro ao enviar para a API de impressão:', erro);
-  }
-
-  // 2. Monta o texto formatado para o WhatsApp
-  let mensagem = `*NOVO PEDIDO - BRABO'S BURGUER*\n\n`;
-  mensagem += `*Cliente:* ${pedidoData.cliente}\n`;
-  if (pedidoData.telefone) mensagem += `*Telefone:* ${pedidoData.telefone}\n`;
-  if (pedidoData.endereco) mensagem += `*Endereço:* ${pedidoData.endereco}\n`;
-  if (pedidoData.formaPagamento) mensagem += `*Pagamento:* ${pedidoData.formaPagamento}\n`;
-  if (pedidoData.troco !== 'Não') mensagem += `*Troco para:* R$ ${pedidoData.troco}\n`;
-  
- mensagem += `\n*ITENS:* \n`;
-  pedidoData.itens.forEach(item => {
-    mensagem += `• ${item.qtd}x ${item.nome} - R$ ${(item.preco * item.qtd).toFixed(2).replace('.', ',')}\n`;
-    if (item.observacao) mensagem += `  _Obs: ${item.observacao}_\n`;
-  });
-
-  mensagem += `\n*TOTAL:* R$ ${pedidoData.total.toFixed(2).replace('.', ',')}`;
-
-  // 3. Abre no WhatsApp oficial do Brabo's Burguer
-  const foneLoja = '5531997401932'; 
-  const urlWhatsapp = `https://wa.me/${foneLoja}?text=${encodeURIComponent(mensagem)}`;
-  
-  window.open(urlWhatsapp, '_blank');
-}
-</script>
 </body>
 </html>
